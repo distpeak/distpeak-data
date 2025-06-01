@@ -4,10 +4,10 @@ distpeak-show的配套数据生成器
 ## 简介 
 
  - **名字**：distpeak-data
- - **作者**： [Lirzh](https://github.com/Lirzh) （请替换为实际作者链接）
+ - **作者**： [Lirzh](https://github.com/Lirzh) 
  - **内容概括**：distpeak-data 是 distpeak-show 的配套数据生成器，负责生成展示所需的数据。
  - **协议**：AGPL-3.0 
- - **最后更新**：2025.6.1 （请替换为实际更新时间）
+ - **最后更新**：2025.6.1 
  - **关于AI**：该readme文档由AI生成后人工检验，如有错误请联系作者。
 
  ## 目录 
@@ -34,7 +34,7 @@ distpeak-show的配套数据生成器
 
  ## 反馈问题和 Bug 
 
- 如果你在使用过程中遇到问题或发现 Bug，可以前往 `[项目的 Issues 页面 ](https://github.com/distpeak/distpeak-data/issues)`  提交反馈，我们会 ~~尽快 ~~处理。 
+ 如果你在使用过程中遇到问题或发现 Bug，可以前往 `[项目的 Issues 页面 ](https://github.com/distpeak/distpeak-data/issues)`  提交反馈，我们会 ~~尽快~~处理。 
 
  ## Wiki 界面 
 
