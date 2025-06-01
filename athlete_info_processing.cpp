@@ -126,6 +126,17 @@ int calculateScore(const vector<string>& contestInfo, bool isSpecial) {
     return baseScore + (isSpecial ? 3 : 0);
 }
 
+// 定义宏来统一指定基础输出路径
+#ifndef BASE_OUTPUT_PATH
+#define BASE_OUTPUT_PATH "/ovo/distpeak-show/src/"
+#endif
+
+// 定义子路径
+#define PLAYER_OUTPUT_PATH BASE_OUTPUT_PATH "players/"
+#define CONTEST_OUTPUT_PATH BASE_OUTPUT_PATH "games/"
+#define TEACHER_OUTPUT_PATH BASE_OUTPUT_PATH "teachers/"
+
+
 // 生成选手 Markdown 文件
 void generatePlayerMarkdown(const Player& player, const map<string, Contest>& contests, const map<string, Teacher>& teachers) {
     string filename;
@@ -173,7 +184,7 @@ void generatePlayerMarkdown(const Player& player, const map<string, Contest>& co
         filename = player.name + ".md";
     }
     
-    string path = "players/" + player.year + "/" + filename;
+    string path = PLAYER_OUTPUT_PATH + player.year + "/" + filename;
     fs::create_directories(fs::path(path).parent_path());
 
     string content = "## 个人信息\n";
@@ -328,7 +339,7 @@ void generateContestMarkdown(const Contest& contest, const map<string, Teacher>&
         realContestName = realContestName.substr(1);
     }
 
-    string path = "games/" + contest.year + "/" + realContestName + ".md";
+    string path = CONTEST_OUTPUT_PATH + contest.year + "/" + realContestName + ".md";
     fs::create_directories(fs::path(path).parent_path());
 
     string content = "## 比赛信息\n";
@@ -446,7 +457,7 @@ void generateTeacherMarkdown(const Teacher& teacher) {
         filename = teacher.name + ".md";
     }
     
-    string path = "teachers/" + filename;
+    string path = TEACHER_OUTPUT_PATH + filename;
     fs::create_directories(fs::path(path).parent_path());
 
     string content = "## 老师信息\n";
@@ -726,49 +737,6 @@ int main() {
         return 1;
     }
 
-    // 读取配置文件
-    Config config = readConfig("config.ini");
-
-    // 使用配置文件中的路径清空文件夹
-    fs::remove_all(config.playerArchive);
-    fs::remove_all(config.competitionDocuments);
-    fs::remove_all(config.teacherDocuments);
-
-    map<string, Player> players;
-    map<string, Contest> contests;
-    map<string, Teacher> teachers;
-
-    // 使用配置文件中的路径打开数据文件
-    ifstream file(config.dataDocuments + "/data.txt");
-    if (file.is_open()) {
-        string line;
-        while (getline(file, line)) {
-            // 忽略以 '#' 开头的行和空行
-            if (line.empty() || line[0] == '#') continue;
-            // 去除行末空格
-            line.erase(line.find_last_not_of(" \t") + 1);
-            // 假设存在 parseLine 函数
-            parseLine(line, players, contests, teachers); 
-        }
-        file.close();
-    } else {
-        cerr << "Unable to open file " << config.dataDocuments + "/data.txt" << endl;
-        return 1;
-    }
-
-    // 生成选手 Markdown 文件
-    for (const auto& [key, player] : players) {
-        // 修改此处，传入 config 参数
-        generatePlayerMarkdown(player, contests, teachers, config);
-    }
-
-    // 生成比赛 Markdown 文件
-    for (const auto& [key, contest] : contests) {
-        // 修改此处，传入 config 参数
-        generateContestMarkdown(contest, teachers, config);
-    }
-
-
     // 检查是否有举办年份相同且比赛名字只差 * 号的情况
     if (checkDuplicateContests(contests)) {
         cerr << "Error: Duplicate contests found!" << endl;
@@ -796,12 +764,12 @@ int main() {
 
     // 生成选手 Markdown 文件
     for (const auto& [key, player] : sortedPlayers) {
-        generatePlayerMarkdown(player, contests, teachers, config);
+        generatePlayerMarkdown(player, contests, teachers);
     }
 
     // 生成比赛 Markdown 文件
     for (const auto& [key, contest] : contests) {
-        generateContestMarkdown(contest, teachers, config);
+        generateContestMarkdown(contest, teachers);
     }
 
     // 生成老师 Markdown 文件
